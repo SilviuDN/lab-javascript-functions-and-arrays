@@ -1,24 +1,76 @@
 // Iteration #1: Find the maximum
-function maxOfTwoNumbers() {}
+function maxOfTwoNumbers(a, b) {
+  return a<b?b:a
+}
 
 
 
 // Iteration #2: Find longest word
 const words = ['mystery', 'brother', 'aviator', 'crocodile', 'pearl', 'orchard', 'crackpot'];
 
-function findLongestWord() {}
+function findLongestWord(arr) {
+  if(arr.length == 0){
+    return null
+  }
+  let res = arr[0]
+  arr.forEach( word => {
+    if (word.length > res.length){
+      res = word
+    }
+  })
+  return res
+}
 
 
 
 // Iteration #3: Calculate the sum
 const numbers = [6, 12, 1, 18, 13, 16, 2, 1, 8, 10];
 
-function sumNumbers() {}
+function sumNumbers(arr) {
+  if(arr.length == 0){
+    return 0
+  }
+  let sum = 0
+  arr.forEach( num => sum+=num)
+  return sum
+}
 
 
 
 // Iteration #3.1 Bonus:
-function sum() {}
+function sum(arr) {
+  try{
+    let summableArr = transform(arr)
+    return sumNumbers(summableArr)
+  }catch(e){
+    throw new Error(e)
+  }
+
+}
+
+function transform(arr){
+  try{
+    let summableArray = arr.map( el => transformElement(el))
+    return summableArray
+  }catch(e){
+    throw e
+  }
+
+}
+
+function transformElement(el){
+  if (typeof el == 'string'){
+    return el.length
+  } else if(typeof el == 'boolean'){
+    return 0+el
+  }else if (typeof el == 'number'){
+    return el
+  }else if(typeof el == 'object'){
+    throw ("Unsupported data type sir or ma'am")
+  }else{
+    return 0
+  }
+}
 
 
 
@@ -26,16 +78,34 @@ function sum() {}
 // Level 1: Array of numbers
 const numbersAvg = [2, 6, 9, 10, 7, 4, 1, 9];
 
-function averageNumbers() {}
+function averageNumbers(arr) {
+  if(arr.length == 0){
+    return null
+  }else{
+    return sumNumbers(arr) / arr.length
+  }
+}
 
 
 // Level 2: Array of strings
 const wordsArr = ['seat', 'correspond', 'linen', 'motif', 'hole', 'smell', 'smart', 'chaos', 'fuel', 'palace'];
 
-function averageWordLength() { }
+function averageWordLength(arr) {
+  if(arr.length == 0){
+    return null
+  }else{
+    return sum(arr) / arr.length
+  }
+}
 
 // Bonus - Iteration #4.1
-function avg() {}
+function avg(arr) {
+  if(arr.length == 0){
+    return null
+  }else{
+    return sum(arr) / arr.length
+  }
+}
 
 // Iteration #5: Unique arrays
 const wordsUnique = [
@@ -52,14 +122,32 @@ const wordsUnique = [
   'bring'
 ];
 
-function uniquifyArray() {}
-
+function uniquifyArray(arr) {
+  if(arr.length == 0){
+    return null
+  }else{
+    let res = []
+    arr.forEach(el => {
+      if ( res.indexOf(el) == -1)
+      res.push(el)
+    })
+    return res
+  }
+}
 
 
 // Iteration #6: Find elements
 const wordsFind = ['machine', 'subset', 'trouble', 'starting', 'matter', 'eating', 'truth', 'disobedience'];
 
-function doesWordExist() {}
+function doesWordExist(arr, word) {
+  if(arr.length == 0){
+    return null
+  }else{
+    return arr.includes(word)
+    }
+  }
+  
+
 
 
 
@@ -78,7 +166,16 @@ const wordsCount = [
   'matter'
 ];
 
-function howManyTimes() {}
+function howManyTimes(arr, word) {
+  if(arr.length == 0){
+    return 0
+  }else{
+    let count = 0
+    arr.forEach(el => count += (el == word))
+    return count
+    }
+  
+  }
 
 
 
@@ -106,7 +203,55 @@ const matrix = [
   [1, 70, 54, 71, 83, 51, 54, 69, 16, 92, 33, 48, 61, 43, 52, 1, 89, 19, 67, 48]
 ];
 
-function greatestProduct() {}
+function prod(arr, terms, pos){
+  if(arr.len < terms + pos + 1){
+    throw(`The array has less than ${terms} elements`)
+  }
+  let prod = 1
+  for(let i=0; i<terms; i++){
+    prod *= arr[pos + i]
+  }
+  return prod
+}
+
+function greatestProductInArr(arr, terms){
+  if(arr.len < terms){
+    throw(`The array has less than ${terms} elements`)
+  }
+  let maxProd = prod(arr, terms, 0)
+  for(let i = 1; i<arr.length-terms; i++){
+    maxProd = maxProd<prod(arr, terms, i) ? prod(arr, terms, i) : maxProd
+  }
+  return maxProd
+}
+
+function greatestProductForLines(arr, terms){
+  // let linesNumber = arr.length
+  let maxProd = greatestProductInArr(arr[0], terms)
+  arr.forEach(el => {
+    maxProd = maxProd< greatestProductInArr(el, terms) ? greatestProductInArr(el, terms) : maxProd  
+  })
+  return maxProd
+}
+
+function transposeMatrix(arr){
+  let res = arr
+  for(let i=0; i<arr.length; i++){
+    for(let j=0; j<arr[0].length; j++){
+      res[i][j] = arr[j][i]
+    }
+  }
+  return res
+
+}
+
+function greatestProduct(arr) {
+  let maxProdOnLines = greatestProductForLines(arr, 4)
+  let transpose = transposeMatrix(arr)
+  let maxProdOnColumns = greatestProductForLines(transpose, 4)
+  return Math.max( maxProdOnColumns, maxProdOnLines)
+
+}
 
 
 
